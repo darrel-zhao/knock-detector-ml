@@ -7,19 +7,28 @@ import tornado.websocket
 
 CSV_FILE = None
 CSV_WRITER = None
+global numData, t0
 
 def open_csv():
-    global CSV_FILE, CSV_WRITER
+    global CSV_FILE, CSV_WRITER, t0
+    t0 = time.time()
     fname = f"sensor_log_{datetime.now().strftime('%Y-%m-%d')}.csv"
     CSV_FILE = open(fname, mode="a", newline="", buffering=1)
     CSV_WRITER = csv.writer(CSV_FILE)
     # Write header if file is empty
     if CSV_FILE.tell() == 0:
         CSV_WRITER.writerow(["mic", "imu"])
+        CSV_WRITER.writerow(["start time", t0])
 
 def close_csv():
-    global CSV_FILE
+    global CSV_FILE, numData, t0
+    tfinal = time.time()
+    elapsed = tfinal - t0
     if CSV_FILE:
+        CSV_WRITER.writerow(["sampling time", elapsed])
+        CSV_WRITER.writerow(["num data", numData])
+        frequency = numData / elapsed if elapsed > 0 else 0
+        CSV_WRITER.writerow(["sampling frequency", frequency])
         CSV_FILE.flush()
         CSV_FILE.close()
         CSV_FILE = None
@@ -32,8 +41,9 @@ class WS(tornado.websocket.WebSocketHandler):
         print("client connected")
 
     def on_message(self, message):
-        print(f"[MCU] {message}")
-        self.write_message(message)  # echo back
+        global numData
+        # print(f"[MCU] {message}")
+        self.write_message(message) # echo back
 
         # --- CSV logging ---
         try:
@@ -44,6 +54,7 @@ class WS(tornado.websocket.WebSocketHandler):
             mic = float(mic_str)
             imu = float(imu_str)
             CSV_WRITER.writerow([mic, imu])
+            numData += 1
         except Exception as e:
             print(f"[WARN] Failed to log row: {e}")
 
@@ -62,7 +73,8 @@ def shutdown(_sig, _frame):
 
 if __name__ == "__main__":
     open_csv()
-
+    numData = 0
+    
     # Clean shutdown on Ctrl+C / SIGTERM
     signal.signal(signal.SIGINT, shutdown)
     signal.signal(signal.SIGTERM, shutdown)
