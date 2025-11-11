@@ -8,6 +8,7 @@ import tornado.websocket
 CSV_FILE = None
 CSV_WRITER = None
 global numData, t0
+global test_numbers
 
 def open_csv():
     global CSV_FILE, CSV_WRITER, t0
@@ -42,7 +43,18 @@ class WS(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         global numData
-        # print(f"[MCU] {message}")
+        global test_numbers
+
+        # debugging purposes; delete later************
+        val = int(message) if message.isdigit() else -1
+        if val >= 0:
+            test_numbers.append(val)
+        if len(test_numbers) > 1 and test_numbers[-1] - test_numbers[-2] != 1:
+            print(f"[WARN] Missing number! {test_numbers[-2]} -> {test_numbers[-1]}")
+        if val % 100 == 0:
+            print(f"[MCU] {message}")
+    
+        # part of original code; stop deleting********
         self.write_message(message) # echo back
 
         # --- CSV logging ---
@@ -74,6 +86,7 @@ def shutdown(_sig, _frame):
 if __name__ == "__main__":
     open_csv()
     numData = 0
+    test_numbers = []
     
     # Clean shutdown on Ctrl+C / SIGTERM
     signal.signal(signal.SIGINT, shutdown)
