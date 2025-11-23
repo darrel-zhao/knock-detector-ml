@@ -19,17 +19,17 @@ def open_csv():
     # Write header if file is empty
     if CSV_FILE.tell() == 0:
         CSV_WRITER.writerow(["mic", "imu"])
-        CSV_WRITER.writerow(["start time", t0])
+        # CSV_WRITER.writerow(["start time", t0])
 
 def close_csv():
     global CSV_FILE, numData, t0
     tfinal = time.time()
     elapsed = tfinal - t0
     if CSV_FILE:
-        CSV_WRITER.writerow(["sampling time", elapsed])
-        CSV_WRITER.writerow(["num data", numData])
-        frequency = numData / elapsed if elapsed > 0 else 0
-        CSV_WRITER.writerow(["sampling frequency", frequency])
+        # CSV_WRITER.writerow(["sampling time", elapsed])
+        # CSV_WRITER.writerow(["num data", numData])
+        # frequency = numData / elapsed if elapsed > 0 else 0
+        # CSV_WRITER.writerow(["sampling frequency", frequency])
         CSV_FILE.flush()
         CSV_FILE.close()
         CSV_FILE = None

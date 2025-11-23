@@ -96,8 +96,10 @@ Adafruit_MPU6050 mpu;
 #define MIC_SD 34  // SD  / DOUT
 
 // Sending initializations
+const uint16_t BUFFER_SIZE = 16;
+const uint16_t BUFFER_COUNT = 8; 
 const int BATCH_SIZE = 1000;
-const int BUF_SIZE = BATCH_SIZE * 20 + 4000; // rough estimate of required buffer size
+const int SEND_SIZE = BATCH_SIZE * 20 + 4000; // rough estimate of required buffer size
 static uint16_t batchIndex = 0;
 static uint16_t micBatch[BATCH_SIZE];
 static float imuBatch[BATCH_SIZE];
@@ -121,18 +123,19 @@ void setup()
 void loop()
 {
   ws.loop();
+
   static int count = 0;
 
-  static int32_t avgArray[1024];
+  static int32_t avgArray[BUFFER_SIZE * BUFFER_COUNT];
   static uint8_t index = 0;
 
-  int32_t buf[256];
+  int32_t buf[BUFFER_SIZE];
   size_t bytesRead = 0;
   i2s_read(I2S_PORT, buf, sizeof(buf), &bytesRead, portMAX_DELAY);
 
   int n = bytesRead / sizeof(int32_t);
 
-  memcpy(&avgArray[index * 256], buf, n * sizeof(int32_t));
+  memcpy(&avgArray[index * BUFFER_SIZE], buf, n * sizeof(int32_t));
   index = (index == 3) ? index = 0 : index++;
 
   // MIC AVG VALUE CALCULATION
@@ -168,7 +171,7 @@ void loop()
   // if batch index full, send batch over websocket
   if (batchIndex >= BATCH_SIZE && wsConnected)
   {
-    static char msgBuf[BUF_SIZE];
+    static char msgBuf[SEND_SIZE];
     size_t offset = 0;
 
     for (int i = 0; i < BATCH_SIZE && offset < sizeof(msgBuf) - 1; i++)
@@ -189,14 +192,15 @@ void loop()
 
     // send entire batch
     ws.sendTXT(msgBuf, offset);
-    Serial.printf("Sent batch of %d samples\n", BATCH_SIZE);
+    unsigned long tnow = millis();
+    float tdiff = (tnow - tstart) / 1000;
+    Serial.printf("Sent batch of %d samples in %.3f seconds (%.3f samples/second)\n", BATCH_SIZE, tdiff, (float)BATCH_SIZE / tdiff);
+    tstart = millis();
 
     // reset batch
     batchIndex = 0;
   }
 
-  // String msg = String((uint32_t)(micValSum / n)) + ", " + String(xyzAccel);
-  // ws.sendTXT(msg);
 }
 
 // HELPER FUNCTIONS
@@ -261,10 +265,3 @@ void initWebsockets()
   ws.onEvent(onWsEvent);
   ws.setReconnectInterval(5000);
 }
-
-// Debugging
-// 1. send sequence numbers over websocket, print every 100th value on both sides to check for
-// time sync (if sequence numbers are out of order, print), calculate sending frequency on both sides
-// 2. Do step 1, but bin at n = 100, 1000, etc.
-// 3. Check to see if I am overwriting any buffers for my mic values
-// --- check droppage of data with some i2s. function
