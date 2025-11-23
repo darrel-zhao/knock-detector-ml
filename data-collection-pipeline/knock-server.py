@@ -45,30 +45,37 @@ class WS(tornado.websocket.WebSocketHandler):
         global numData
         global test_numbers
 
-        # # debugging purposes; delete later************
-        # val = int(message) if message.isdigit() else -1
-        # if val >= 0:
-        #     test_numbers.append(val)
-        # if len(test_numbers) > 1 and test_numbers[-1] - test_numbers[-2] != 1:
-        #     print(f"[WARN] Missing number! {test_numbers[-2]} -> {test_numbers[-1]}")
-        # if val % 100 == 0:
-        #     print(f"[MCU] {message}")
-    
-        # # part of original code; stop deleting********
-        self.write_message(message) # echo back
+        # message can be bytes or str depending on Tornado/WebSocket client
+        if isinstance(message, bytes):
+            text = message.decode("utf-8", errors="ignore")
+        else:
+            text = message
 
-        # --- CSV logging ---
-        try:
-            parts = message.strip().split(",")
+        # Optional: echo back the raw text (careful, this will echo the whole batch)
+        # You can comment this out if it gets too heavy.
+        self.write_message(text)
+
+        # --- CSV logging for batched or single-line messages ---
+        for line in text.splitlines():
+            line = line.strip()
+            if not line:
+                continue  # skip empty lines
+
+            parts = line.split(",")
             if len(parts) < 2:
-                return  # ignore malformed
-            mic_str, imu_str = parts[0].strip(), parts[1].strip()
-            mic = float(mic_str)
-            imu = float(imu_str)
-            CSV_WRITER.writerow([mic, imu])
-            numData += 1
-        except Exception as e:
-            print(f"[WARN] Failed to log row: {e}")
+                # malformed line, ignore
+                continue
+
+            mic_str = parts[0].strip()
+            imu_str = parts[1].strip()
+
+            try:
+                mic = float(mic_str)
+                imu = float(imu_str)
+                CSV_WRITER.writerow([mic, imu])
+                numData += 1
+            except Exception as e:
+                print(f"[WARN] Failed to log row from line {line!r}: {e}")
 
     def on_close(self):
         print("client disconnected")
