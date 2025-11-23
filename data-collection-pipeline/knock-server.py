@@ -45,16 +45,16 @@ class WS(tornado.websocket.WebSocketHandler):
         global numData
         global test_numbers
 
-        # debugging purposes; delete later************
-        val = int(message) if message.isdigit() else -1
-        if val >= 0:
-            test_numbers.append(val)
-        if len(test_numbers) > 1 and test_numbers[-1] - test_numbers[-2] != 1:
-            print(f"[WARN] Missing number! {test_numbers[-2]} -> {test_numbers[-1]}")
-        if val % 100 == 0:
-            print(f"[MCU] {message}")
+        # # debugging purposes; delete later************
+        # val = int(message) if message.isdigit() else -1
+        # if val >= 0:
+        #     test_numbers.append(val)
+        # if len(test_numbers) > 1 and test_numbers[-1] - test_numbers[-2] != 1:
+        #     print(f"[WARN] Missing number! {test_numbers[-2]} -> {test_numbers[-1]}")
+        # if val % 100 == 0:
+        #     print(f"[MCU] {message}")
     
-        # part of original code; stop deleting********
+        # # part of original code; stop deleting********
         self.write_message(message) # echo back
 
         # --- CSV logging ---

@@ -1,3 +1,5 @@
+#include "credentials.h"
+
 #include <Arduino.h>
 #include "driver/i2s.h"
 #include <Adafruit_MPU6050.h>
@@ -7,11 +9,12 @@
 #include <WebSocketsClient.h>
 
 // Wifi credentials
-const char* WIFI_SSID = "Device-Northwestern";
+const char* WIFI_SSID = SSID;
+const char* WIFI_PASSWORD = PASSWORD; // delete when back on campus
 
 // Server info (your PC running echo_server.py)
 WebSocketsClient ws;
-const char* WS_HOST = "10.105.226.204";
+const char* WS_HOST = IP_ADDRESS;
 const uint16_t WS_PORT = 8765;
 const char* WS_PATH = "/ws";
 unsigned long tstart;
@@ -61,9 +64,9 @@ void onWsEvent(WStype_t type, uint8_t * payload, size_t length) {
     case WStype_TEXT:
       numData++;
       if (numData / 100 >= 1) {
-        // Serial.printf("[SERVER] %i (mic, imu) values received, ending with ", numData);
-        // Serial.write(payload, length);
-        // Serial.println();
+        Serial.printf("[SERVER] %i (mic, imu) values received, ending with ", numData);
+        Serial.write(payload, length);
+        Serial.println();
         numData = 0;
       }
       break;
@@ -111,6 +114,7 @@ void loop() {
   i2s_read(I2S_PORT, buf, sizeof(buf), &bytesRead, portMAX_DELAY);
 
   int n = bytesRead / sizeof(int32_t);
+
   memcpy(&avgArray[index * 256], buf, n * sizeof(int32_t));
   index = (index == 3) ? index = 0 : index++;
 
@@ -126,18 +130,8 @@ void loop() {
   mpu.getEvent(&a, &g, &temp); // Read accelerometer, gyroscope, and temperature
 
   float xyzAccel = (a.acceleration.x + a.acceleration.y + a.acceleration.z) / 3;
-  // ws.sendTXT(String(micValSum / n) + ", " + String(xyzAccel));
-  // Serial.println('hi');
-  String msg = String(count);
+  String msg = String((uint32_t)(micValSum / n)) + ", " + String(xyzAccel);
   ws.sendTXT(msg);
-
-  if (count % 100 == 0) {
-    unsigned long elapsed = millis() - tstart;
-    float frequency = count / ((int)elapsed / 1000);
-    Serial.println(count);
-    Serial.printf("frequency: %.2f samples per second\n", frequency);
-  }
-  count++;
   
 }
 
@@ -190,7 +184,7 @@ void initWebsockets() {
   // Configure WiFi
   WiFi.mode(WIFI_STA);
   Serial.print("Connecting to "); Serial.println(WIFI_SSID);
-  WiFi.begin(WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   testWifiConnection();
 
