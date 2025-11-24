@@ -136,11 +136,11 @@ void loop()
   int n = bytesRead / sizeof(int32_t);
 
   memcpy(&avgArray[index * BUFFER_SIZE], buf, n * sizeof(int32_t));
-  index = (index == 3) ? index = 0 : index++;
+  index = (index == BUFFER_COUNT-1) ? index = 0 : index++;
 
   // MIC AVG VALUE CALCULATION
   uint64_t micValSum = 0;
-  for (uint32_t ii = 0; ii < n * 4; ii++)
+  for (uint32_t ii = 0; ii < BUFFER_SIZE * BUFFER_COUNT; ii++)
   {
     uint8_t nextMicVal = abs(avgArray[ii] >> 24);
     micValSum += nextMicVal;
@@ -157,7 +157,7 @@ void loop()
     return;
   }
 
-  uint32_t micAvg = (uint32_t)(micValSum / (n * 4));
+  uint32_t micAvg = (uint32_t)(micValSum / (BUFFER_SIZE * BUFFER_COUNT));
 
   // if batch index not full, add to batch and return (move to next iteration)
   if (batchIndex < BATCH_SIZE)
@@ -213,8 +213,8 @@ void setupI2S()
       .channel_format = I2S_CHANNEL_FMT_ONLY_LEFT,  // L/R pin tied to GND
       .communication_format = I2S_COMM_FORMAT_STAND_MSB,
       .intr_alloc_flags = ESP_INTR_FLAG_LEVEL1,
-      .dma_buf_count = 4,
-      .dma_buf_len = 256,
+      .dma_buf_count = BUFFER_COUNT,
+      .dma_buf_len = BUFFER_SIZE,
       .use_apll = false,
       .tx_desc_auto_clear = false,
       .fixed_mclk = 0};
