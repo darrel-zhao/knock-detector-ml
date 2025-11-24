@@ -7,29 +7,20 @@ import tornado.websocket
 
 CSV_FILE = None
 CSV_WRITER = None
-global numData, t0
-global test_numbers
+global numData
 
 def open_csv():
-    global CSV_FILE, CSV_WRITER, t0
-    t0 = time.time()
+    global CSV_FILE, CSV_WRITER
     fname = f"sensor_log_{datetime.now().strftime('%Y-%m-%d')}.csv"
     CSV_FILE = open(fname, mode="a", newline="", buffering=1)
     CSV_WRITER = csv.writer(CSV_FILE)
     # Write header if file is empty
     if CSV_FILE.tell() == 0:
         CSV_WRITER.writerow(["mic", "imu"])
-        # CSV_WRITER.writerow(["start time", t0])
 
 def close_csv():
-    global CSV_FILE, numData, t0
-    tfinal = time.time()
-    elapsed = tfinal - t0
+    global CSV_FILE, numData 
     if CSV_FILE:
-        # CSV_WRITER.writerow(["sampling time", elapsed])
-        # CSV_WRITER.writerow(["num data", numData])
-        # frequency = numData / elapsed if elapsed > 0 else 0
-        # CSV_WRITER.writerow(["sampling frequency", frequency])
         CSV_FILE.flush()
         CSV_FILE.close()
         CSV_FILE = None
@@ -43,7 +34,6 @@ class WS(tornado.websocket.WebSocketHandler):
 
     def on_message(self, message):
         global numData
-        global test_numbers
 
         # message can be bytes or str depending on Tornado/WebSocket client
         if isinstance(message, bytes):
@@ -93,7 +83,6 @@ def shutdown(_sig, _frame):
 if __name__ == "__main__":
     open_csv()
     numData = 0
-    test_numbers = []
     
     # Clean shutdown on Ctrl+C / SIGTERM
     signal.signal(signal.SIGINT, shutdown)
