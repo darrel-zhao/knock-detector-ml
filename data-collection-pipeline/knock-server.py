@@ -1,5 +1,5 @@
 # ws_server.py
-import time, json, csv, signal, sys
+import time, json, csv, signal, sys, os
 from datetime import datetime
 import tornado.ioloop
 import tornado.web
@@ -7,11 +7,18 @@ import tornado.websocket
 
 CSV_FILE = None
 CSV_WRITER = None
-global numData
+global numData, numBatches
 
 def open_csv():
     global CSV_FILE, CSV_WRITER
-    fname = f"sensor_log_{datetime.now().strftime('%Y-%m-%d')}.csv"
+    out_dir = "collected-data"
+    os.makedirs(out_dir, exist_ok=True)
+
+    fname = os.path.join(
+        out_dir,
+        f"sensor_log_{datetime.now().strftime('%Y-%m-%d_%H-%M-%S')}.csv"
+    )
+    
     CSV_FILE = open(fname, mode="a", newline="", buffering=1)
     CSV_WRITER = csv.writer(CSV_FILE)
     # Write header if file is empty
@@ -19,7 +26,7 @@ def open_csv():
         CSV_WRITER.writerow(["mic", "imu"])
 
 def close_csv():
-    global CSV_FILE, numData 
+    global CSV_FILE, numData, numBatches
     if CSV_FILE:
         CSV_FILE.flush()
         CSV_FILE.write(f"# Total data points logged: {numData}\n")
@@ -34,7 +41,7 @@ class WS(tornado.websocket.WebSocketHandler):
         print("client connected")
 
     def on_message(self, message):
-        global numData
+        global numData, numBatches
 
         # message can be bytes or str depending on Tornado/WebSocket client
         if isinstance(message, bytes):
@@ -44,7 +51,8 @@ class WS(tornado.websocket.WebSocketHandler):
 
         # Optional: echo back the raw text (careful, this will echo the whole batch)
         # You can comment this out if it gets too heavy.
-        self.write_message(text)
+        numBatches += 1
+        print(f"Data received: Batch {numBatches}")
 
         # --- CSV logging for batched or single-line messages ---
         for line in text.splitlines():
@@ -84,6 +92,7 @@ def shutdown(_sig, _frame):
 if __name__ == "__main__":
     open_csv()
     numData = 0
+    numBatches = 0
     
     # Clean shutdown on Ctrl+C / SIGTERM
     signal.signal(signal.SIGINT, shutdown)
