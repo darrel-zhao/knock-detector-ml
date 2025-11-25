@@ -29,7 +29,7 @@ def close_csv():
     global CSV_FILE, numData, numBatches
     if CSV_FILE:
         CSV_FILE.flush()
-        CSV_FILE.write(f"# Total data points logged: {numData}\n")
+        # CSV_FILE.write(f"# Total data points logged: {numData}\n")
         CSV_FILE.close()
         CSV_FILE = None
 

@@ -126,8 +126,8 @@ void loop()
 
   static int count = 0;
 
-  static int32_t avgArray[BUFFER_SIZE * BUFFER_COUNT];
-  static uint8_t index = 0;
+  // static int32_t avgArray[BUFFER_SIZE * BUFFER_COUNT];
+  // static uint8_t index = 0;
 
   int32_t buf[BUFFER_SIZE];
   size_t bytesRead = 0;
@@ -135,16 +135,28 @@ void loop()
 
   int n = bytesRead / sizeof(int32_t);
 
-  memcpy(&avgArray[index * BUFFER_SIZE], buf, n * sizeof(int32_t));
-  index = (index == BUFFER_COUNT-1) ? index = 0 : index++;
+  // memcpy(&avgArray[index * BUFFER_SIZE], buf, n * sizeof(int32_t));
+  // index = (index == BUFFER_COUNT-1) ? index = 0 : index++;
 
-  // MIC AVG VALUE CALCULATION
-  uint64_t micValSum = 0;
-  for (uint32_t ii = 0; ii < BUFFER_SIZE * BUFFER_COUNT; ii++)
+  // // MIC AVG VALUE CALCULATION
+  // uint64_t micValSum = 0;
+  // for (uint32_t ii = 0; ii < BUFFER_SIZE * BUFFER_COUNT; ii++)
+  // {
+  //   int32_t s32 = avgArray[ii] >> 8;
+  //   int16_t nextMicVal = (int16_t)s32;
+  //   micValSum += nextMicVal;
+  // }
+  // uint32_t micAvg = (uint32_t)(micValSum / (BUFFER_SIZE * BUFFER_COUNT));
+
+  // mic RMS energy calculation
+  int64_t micSumSq = 0;
+  for (int i = 0; i < n; i++)
   {
-    uint8_t nextMicVal = abs(avgArray[ii] >> 24);
-    micValSum += nextMicVal;
+    int32_t s32 = buf[i] >> 8;
+    int16_t nextMicVal = (int16_t)s32;
+    micSumSq += (int32_t)nextMicVal * (int32_t)nextMicVal;
   }
+  float micRms = sqrtf((float)micSumSq / n);
 
   // IMU AVG VALUE CALCULATION
   sensors_event_t a, g, temp;
@@ -152,17 +164,11 @@ void loop()
 
   float xyzAccel = (a.acceleration.x + a.acceleration.y + a.acceleration.z) / 3;
 
-  if (n <= 0)
-  {
-    return;
-  }
-
-  uint32_t micAvg = (uint32_t)(micValSum / (BUFFER_SIZE * BUFFER_COUNT));
-
   // if batch index not full, add to batch and return (move to next iteration)
   if (batchIndex < BATCH_SIZE)
   {
-    micBatch[batchIndex] = (uint16_t)micAvg;
+    // micBatch[batchIndex] = (uint16_t)micAvg;
+    micBatch[batchIndex] = (uint16_t)micRms;
     imuBatch[batchIndex] = xyzAccel;
     batchIndex++;
     return;
