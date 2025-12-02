@@ -112,7 +112,7 @@ const int BAUD = 115200;       // Serial Plotter baud
 
 void setup()
 {
-  Serial.begin(115200);
+  Serial.begin(BAUD);
 
   numData = -1;
   initWebsockets();
@@ -126,27 +126,11 @@ void loop()
 
   static int count = 0;
 
-  // static int32_t avgArray[BUFFER_SIZE * BUFFER_COUNT];
-  // static uint8_t index = 0;
-
   int32_t buf[BUFFER_SIZE];
   size_t bytesRead = 0;
   i2s_read(I2S_PORT, buf, sizeof(buf), &bytesRead, portMAX_DELAY);
 
   int n = bytesRead / sizeof(int32_t);
-
-  // memcpy(&avgArray[index * BUFFER_SIZE], buf, n * sizeof(int32_t));
-  // index = (index == BUFFER_COUNT-1) ? index = 0 : index++;
-
-  // // MIC AVG VALUE CALCULATION
-  // uint64_t micValSum = 0;
-  // for (uint32_t ii = 0; ii < BUFFER_SIZE * BUFFER_COUNT; ii++)
-  // {
-  //   int32_t s32 = avgArray[ii] >> 8;
-  //   int16_t nextMicVal = (int16_t)s32;
-  //   micValSum += nextMicVal;
-  // }
-  // uint32_t micAvg = (uint32_t)(micValSum / (BUFFER_SIZE * BUFFER_COUNT));
 
   // mic RMS energy calculation
   int64_t micSumSq = 0;
@@ -245,8 +229,7 @@ void initHardware()
   if (!mpu.begin())
   {
     Serial.println("Failed to find MPU6050 chip!");
-    while (1)
-      delay(10);
+    return;
   }
 
   mpu.setAccelerometerRange(MPU6050_RANGE_8_G);
@@ -262,7 +245,7 @@ void initWebsockets()
   WiFi.mode(WIFI_STA);
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
-  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
+  WiFi.begin(WIFI_SSID);
 
   testWifiConnection();
 
