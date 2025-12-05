@@ -20,7 +20,7 @@ def imu_features(window):
 
 def build_dataset(df, label):
     imu = df['imu'].values
-    windows = make_windows(imu, window_size=100)
+    windows = make_windows(imu, window_size=75, step=75)
 
     rows = []
     # Calculate features for each window, assign each feature vector a label in dataframe

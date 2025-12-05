@@ -144,14 +144,17 @@ void loop()
 
   // IMU AVG VALUE CALCULATION
   sensors_event_t a, g, temp;
-  mpu.getEvent(&a, &g, &temp); // Read accelerometer, gyroscope, and temperature
+  unsigned long lastImu = 0;
+  if (millis() - lastImu > 5) {  // 200 Hz IMU
+      mpu.getEvent(&a, &g, &temp);
+      lastImu = millis();
+  }
 
   float xyzAccel = (a.acceleration.x + a.acceleration.y + a.acceleration.z) / 3;
 
   // if batch index not full, add to batch and return (move to next iteration)
   if (batchIndex < BATCH_SIZE)
   {
-    // micBatch[batchIndex] = (uint16_t)micAvg;
     micBatch[batchIndex] = (uint16_t)micRms;
     imuBatch[batchIndex] = xyzAccel;
     batchIndex++;
@@ -183,7 +186,7 @@ void loop()
     // send entire batch
     ws.sendTXT(msgBuf, offset);
     unsigned long tnow = millis();
-    float tdiff = (tnow - tstart) / 1000;
+    float tdiff = (tnow - tstart) / BATCH_SIZE;
     Serial.printf("Sent batch of %d samples in %.3f seconds (%.3f samples/second)\n", BATCH_SIZE, tdiff, (float)BATCH_SIZE / tdiff);
     tstart = millis();
 
