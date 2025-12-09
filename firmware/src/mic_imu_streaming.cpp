@@ -150,13 +150,17 @@ void loop()
       lastImu = millis();
   }
 
-  float xyzAccel = (a.acceleration.x + a.acceleration.y + a.acceleration.z) / 3;
+  float xSquared = a.acceleration.x * a.acceleration.x;
+  float ySquared = a.acceleration.y * a.acceleration.y;
+  float zSquared = a.acceleration.z * a.acceleration.z;
+
+  float imuMag = sqrtf(xSquared + ySquared + zSquared);
 
   // if batch index not full, add to batch and return (move to next iteration)
   if (batchIndex < BATCH_SIZE)
   {
     micBatch[batchIndex] = (uint16_t)micRms;
-    imuBatch[batchIndex] = xyzAccel;
+    imuBatch[batchIndex] = imuMag;
     batchIndex++;
     return;
   }
