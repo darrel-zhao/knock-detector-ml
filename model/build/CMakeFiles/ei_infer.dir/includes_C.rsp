@@ -1,0 +1,1 @@
+-I"C:/Users/Owner/Downloads/knock-detector-ml/model" -I"C:/Users/Owner/Downloads/knock-detector-ml/model/edge-impulse-sdk" -I"C:/Users/Owner/Downloads/knock-detector-ml/model/model-parameters" -I"C:/Users/Owner/Downloads/knock-detector-ml/model/tflite-model"

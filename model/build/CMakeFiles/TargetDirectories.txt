@@ -1,0 +1,3 @@
+C:/Users/Owner/Downloads/knock-detector-ml/model/build/CMakeFiles/ei_infer.dir
+C:/Users/Owner/Downloads/knock-detector-ml/model/build/CMakeFiles/edit_cache.dir
+C:/Users/Owner/Downloads/knock-detector-ml/model/build/CMakeFiles/rebuild_cache.dir
