@@ -11,7 +11,8 @@ This project was built with both hardware and software components. The following
 - [I2S Microphone](https://tinyurl.com/y43e6r94)
 - [ESP32 Microcontroller](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32E/12091810?gclsrc=aw.ds&gad_source=1&gad_campaignid=20243136172&gbraid=0AAAAADrbLljTnHpUbhJn7eQMhVgfmvqop&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgF6fxXwYMWDpEv_bgImpCIXCN3ZPwfsMf7CKLE40MVjdao0SXQoEYaAsT7EALw_wcB)
 
-The following software tools were used:
+The following software tools/frameworks were used:
+- Arduino
 - Edge Impulse
 - CMake
 - MinGW32
