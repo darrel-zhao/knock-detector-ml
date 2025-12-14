@@ -22,7 +22,6 @@ KNOCK_THRESHOLD = 0.9
 
 
 def start_infer_process():
-    """Start the ei_infer.exe process and spawn a reader thread for its stdout."""
     global infer_proc
 
     if not EI_INFER_PATH.exists():
@@ -31,14 +30,13 @@ def start_infer_process():
 
     print(f"[INF] Starting EI process: {EI_INFER_PATH}")
 
-    # Use binary pipes; we'll encode/decode ourselves (more reliable on Windows)
     infer_proc = subprocess.Popen(
         [str(EI_INFER_PATH)],
         stdin=subprocess.PIPE,
         stdout=subprocess.PIPE,
         stderr=subprocess.STDOUT,
-        bufsize=0,      # unbuffered
-        text=False      # binary mode
+        bufsize=0,      
+        text=False      
     )
 
     def reader():
@@ -53,7 +51,6 @@ def start_infer_process():
 
             # print("[EI]", line)
 
-            # Expect lines like: "PRED idle=0.123 knock=0.877 ..."
             if line.startswith("PRED"):
                 parts = line.split()[1:]  # skip "PRED"
                 scores = {}
@@ -92,7 +89,7 @@ def send_to_infer(mic, imu):
         print(f"[WARN] Failed to write to EI stdin: {e}")
 
 
-# ---------- Tornado WebSocket server ----------
+# WebSocket handler
 
 class WS(tornado.websocket.WebSocketHandler):
     def check_origin(self, origin):
