@@ -10,7 +10,7 @@
 
 // Wifi credentials
 const char *WIFI_SSID = SSID;
-const char *WIFI_PASSWORD = PASSWORD; // delete when back on campus
+const char *WIFI_PASSWORD = PASSWORD;
 
 // Server info (your PC running echo_server.py)
 WebSocketsClient ws;
@@ -252,7 +252,7 @@ void initWebsockets()
   WiFi.mode(WIFI_STA);
   Serial.print("Connecting to ");
   Serial.println(WIFI_SSID);
-  WiFi.begin(WIFI_SSID);
+  WiFi.begin(WIFI_SSID, WIFI_PASSWORD);
 
   testWifiConnection();
 

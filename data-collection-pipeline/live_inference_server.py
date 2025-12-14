@@ -18,7 +18,7 @@ infer_proc = None
 batch_count = 0
 
 # confidence threshold for declaring a knock
-KNOCK_THRESHOLD = 0.8
+KNOCK_THRESHOLD = 0.9
 
 
 def start_infer_process():
