@@ -2,8 +2,8 @@
 A door-knock detection device that uses an ML model to discern between door knocks and ambient noise.
 
 <p align="center">
-  <img src="https://github.com/user-attachments/assets/9db41e1b-908e-4af1-a69f-3e3c85a14461" width="300">
-  <img src="https://github.com/user-attachments/assets/2d6b2827-6c7a-40c5-898d-61aa2a37c74b" width="300">
+  <img src="https://github.com/user-attachments/assets/9db41e1b-908e-4af1-a69f-3e3c85a14461" width="400">
+  <img src="https://github.com/user-attachments/assets/2d6b2827-6c7a-40c5-898d-61aa2a37c74b" width="400">
 </p>
 
 ## Introduction
