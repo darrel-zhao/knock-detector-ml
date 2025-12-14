@@ -9,6 +9,13 @@ A door-knock detection device that uses an ML model to discern between door knoc
 ## Introduction
 Many professors have students or other faculty who want to drop by their office to chat with them about important things like deadlines, class content, and follow ups to unread emails. However, many professors are often away from their offices, with no way of notifying the person where they are or when they will be back. The purpose of this project is to create a device that helps you detect a door knock (from a student or faculty) and discern that from ambient noise.
 
+## Final Report
+The following link is a PDF that contains a report on my design rationale, justification, and process.  
+[EE 399 Final Report.pdf](https://github.com/user-attachments/files/24152959/EE.399.Final.Report.1.pdf)
+
+## Demo Video
+Link: https://www.youtube.com/watch?v=u8AAG0BuPYU
+
 ## Details
 This project was built with both hardware and software components. The following hardware components were used:
 - [Breadboard (2" x 3")](https://www.digikey.com/en/products/detail/dfrobot/FIT0096/7597069?gclsrc=aw.ds&gad_source=1&gad_campaignid=20232005509&gbraid=0AAAAADrbLli3Zre4ddlozLmGmpiwyJ41o&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgQf9n63cSaX4UHFFwtdKnLwFmu5tf8AWYSMNTi6E1qa-nBFHN2O5AaAvsxEALw_wcB)
@@ -29,10 +36,3 @@ The following software tools/frameworks were used:
 
 ## Results
 I used Edge Impulse to create a ML library that I imported into this project. The model accuracy (as of 12/14/2025) is 97.4%; from field tests, the device detects knocks very well. Noisy inputs such as opening and closing the door, bumping into the door, etc. do not trigger the device; only true knocks do.
-
-## Final Report
-The following link is a PDF that contains a report on my design rationale, justification, and process.  
-[EE 399 Final Report.pdf](https://github.com/user-attachments/files/24152959/EE.399.Final.Report.1.pdf)
-
-## Demo Video
-Link: https://www.youtube.com/watch?v=u8AAG0BuPYU
