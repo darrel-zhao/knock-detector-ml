@@ -31,7 +31,7 @@ The following software tools/frameworks were used:
 I used Edge Impulse to create a ML library that I imported into this project. The model accuracy (as of 12/14/2025) is 97.4%; from field tests, the device detects knocks very well. Noisy inputs such as opening and closing the door, bumping into the door, etc. do not trigger the device; only true knocks do.
 
 ## Final Report
-The following link is a PDF that contains a report on my design rationale, justification, and process. \n
+The following link is a PDF that contains a report on my design rationale, justification, and process.  
 [EE 399 Final Report.pdf](https://github.com/user-attachments/files/24152959/EE.399.Final.Report.1.pdf)
 
 ## Demo Video
