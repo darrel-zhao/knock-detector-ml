@@ -6,10 +6,10 @@ Many professors have students or other faculty that want to drop by their office
 
 ## Details
 This project was built with both hardware and software components. The following hardware components were used:
-- Breadboard (2" x 3"): (https://www.digikey.com/en/products/detail/dfrobot/FIT0096/7597069?gclsrc=aw.ds&gad_source=1&gad_campaignid=20232005509&gbraid=0AAAAADrbLli3Zre4ddlozLmGmpiwyJ41o&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgQf9n63cSaX4UHFFwtdKnLwFmu5tf8AWYSMNTi6E1qa-nBFHN2O5AaAvsxEALw_wcB)
-- IMU (MPU-6050): https://www.amazon.com/Gy-521-MPU-6050-MPU6050-Sensors-Accelerometer/dp/B008BOPN40
-- I2S Microphone: https://tinyurl.com/y43e6r94
-- ESP32 Microcontroller: https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32E/12091810?gclsrc=aw.ds&gad_source=1&gad_campaignid=20243136172&gbraid=0AAAAADrbLljTnHpUbhJn7eQMhVgfmvqop&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgF6fxXwYMWDpEv_bgImpCIXCN3ZPwfsMf7CKLE40MVjdao0SXQoEYaAsT7EALw_wcB
+- [Breadboard (2" x 3")](https://www.digikey.com/en/products/detail/dfrobot/FIT0096/7597069?gclsrc=aw.ds&gad_source=1&gad_campaignid=20232005509&gbraid=0AAAAADrbLli3Zre4ddlozLmGmpiwyJ41o&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgQf9n63cSaX4UHFFwtdKnLwFmu5tf8AWYSMNTi6E1qa-nBFHN2O5AaAvsxEALw_wcB)
+- [IMU (MPU-6050)](https://www.amazon.com/Gy-521-MPU-6050-MPU6050-Sensors-Accelerometer/dp/B008BOPN40)
+- [I2S Microphone](https://tinyurl.com/y43e6r94)
+- [ESP32 Microcontroller](https://www.digikey.com/en/products/detail/espressif-systems/ESP32-DEVKITC-32E/12091810?gclsrc=aw.ds&gad_source=1&gad_campaignid=20243136172&gbraid=0AAAAADrbLljTnHpUbhJn7eQMhVgfmvqop&gclid=Cj0KCQiAuvTJBhCwARIsAL6DemgF6fxXwYMWDpEv_bgImpCIXCN3ZPwfsMf7CKLE40MVjdao0SXQoEYaAsT7EALw_wcB)
 
 The following software tools were used:
 - Edge Impulse
