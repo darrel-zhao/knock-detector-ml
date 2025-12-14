@@ -1,10 +1,13 @@
 # knock-detector-ml
-A door knock detection device that uses an ML model to discern between door knocks and ambient noise.
+A door-knock detection device that uses an ML model to discern between door knocks and ambient noise.
 
-![IMG_6709](https://github.com/user-attachments/assets/9db41e1b-908e-4af1-a69f-3e3c85a14461)
+<p align="center">
+  <img src="https://github.com/user-attachments/assets/9db41e1b-908e-4af1-a69f-3e3c85a14461" width="300">
+  <img src="https://github.com/user-attachments/assets/2d6b2827-6c7a-40c5-898d-61aa2a37c74b" width="300">
+</p>
 
 ## Introduction
-Many professors have students or other faculty that want to drop by their office to chat with them about important things like deadlines, class content, and follow ups to unread emails. However, many professors are often away from their offices, with no way of notifying the person where they are or when they will be back. The purpose of this project is to create a device that helps you detect a door knock (from a student or faculty) and discern that from ambient noise.
+Many professors have students or other faculty who want to drop by their office to chat with them about important things like deadlines, class content, and follow ups to unread emails. However, many professors are often away from their offices, with no way of notifying the person where they are or when they will be back. The purpose of this project is to create a device that helps you detect a door knock (from a student or faculty) and discern that from ambient noise.
 
 ## Details
 This project was built with both hardware and software components. The following hardware components were used:
