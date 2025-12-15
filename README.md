@@ -31,7 +31,7 @@ The following software tools/frameworks were used:
 - Built with C++, C, Python
 
 ## Instructions for Wi-Fi setup
-1. Under firmware/include, you should see a C header file called example_credentials.h. Replace the Wi-Fi SSID, password, and your IP Address with your own information (IP address should be the IPv4 address of your computer)
+1. Under firmware/include, you should see a C header file called example_credentials.h. Replace the Wi-Fi SSID, password, and the IP Address with your own information (IP address should be the IPv4 address of your computer)
 2. Rename example_credentials.h to credentials.h. The gitignore file should ignore the credentials.h file when pushing to your GitHub repo, so your information will not be leaked to the public.
 
 ## Results
