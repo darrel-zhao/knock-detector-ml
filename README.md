@@ -10,7 +10,7 @@ A door-knock detection device that uses an ML model to discern between door knoc
 Many professors have students or other faculty who want to drop by their office to chat with them about important things like deadlines, class content, and follow ups to unread emails. However, many professors are often away from their offices, with no way of notifying the person where they are or when they will be back. The purpose of this project is to create a device that helps you detect a door knock (from a student or faculty) and discern that from ambient noise.
 
 ## Final Report
-The following link is a PDF that contains a report on my design rationale, justification, and process.  
+The following link is a PDF that contains a report on my design rationale, justification, and process. It also has instructions for build/setup/use, which you may find helpful if you want to recreate this project for yourself.  
 [EE 399 Final Report.pdf](https://github.com/user-attachments/files/24152959/EE.399.Final.Report.1.pdf)
 
 ## Demo Video
